@@ -8,4 +8,7 @@ var question6 = ['How do you write "Hello World" in an alert box?', '3', 'alertB
 var question7 = ['How do you create a function in JavaScript?', '2', ' function myFunction()', ' function:myFunction()', ' function = myFunction()'];
 var question8 = ['How do you call a function named "myFunction"?', '3', ' call function myFunction()', ' myFunction()', ' call myFunction()'];
 var question9 = ['How to write an IF statement in JavaScript?', '2', ' if (i == 5)', ' if i = 5', ' if i == 5 then', ' if i = 5 then'];
-var question10 = ['How to write an IF statement for executing some code if "i" is NOT equal to 5?', '5', ' if i <> 5', ' if (i <> 5)', ' if i =! 5 then',' if (i != 5)'];
+var question10 = ['How to write an IF statement for executing some code if "i" is NOT equal to 5?', '5', ' if i <> 5', ' if (i <> 5)', ' if i =! 5 then', ' if (i != 5)'];
+
+// Store all questions in a bigger array
+var questionArray = [question1, question2, question3, question4, question5, question6, question7, question8, question9, question10];
