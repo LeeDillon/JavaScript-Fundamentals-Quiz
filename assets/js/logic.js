@@ -9,9 +9,13 @@ const finalScoreEl = $('#final-score');
 const feedbackEl = $('#feedback');
 const endSection = $('#end-screen');
 const timerEl = $('#time');
+// Why doesn't Jquery selector work for audio???
+const correctSoundEl = document.getElementById('correctSound');
+const incorrectSoundEl = document.getElementById('incorrectSound');
 
 var questionNumber = 0;
 var time = 100;
+var userScore = 0;
 
 
 // // Function for getting a random element from an array
@@ -36,23 +40,28 @@ function loadQuestion() {
         for (i = 2; i < randomQuestionArray.length; i++) {
             var answerBtnEl = $('<button>');
             var answerIndex = i;
-            answerBtnEl.attr('id', 'answer');
-            answerBtnEl.attr('data-index', i);
+            console.log(answerIndex);
+            answerBtnEl.attr('id', i);
+            // answerBtnEl.attr('dataindex', i); WHY DIDN'T THIS WORK!?!?!
             answerBtnEl.text(randomQuestionArray[i]);
             answerBtnEl.addClass('answer-button');
             answerBtnEl.on('click', function () {
-                console.log(answerIndex);
+                var buttonValue = this.id;
+                console.log(buttonValue);
                 console.log(randomQuestionArray[1]);
-                if (answerIndex == randomQuestionArray[1]) {
-                    console.log("Correct")
+                if (buttonValue == randomQuestionArray[1]) {
+                    console.log("Correct");
+                    userScore++;
+                    correctSoundEl.play();
                 } else {
-                    console.log("Incorrect")
+                    console.log("Incorrect");
+                    incorrectSoundEl.play();
+                    time - 10;
                 }
                 console.log("hello");
                 clearAnswers();
             });
             choicesEl.append(answerBtnEl);
-            // console.log("Your answer is", randomQuestionArray[i]);
         }
         questionArray.splice(questionIndex, 1);
     } else {
@@ -66,8 +75,6 @@ startBtnEl.on('click', loadQuestion);
 
 // Function for clearing answer buttons and loading next question
 function clearAnswers() {
-    // if(answerBtnEl){} else {}
-    // console.log(answerBtnEl);
     choicesEl.empty();
     loadQuestion();
 }
