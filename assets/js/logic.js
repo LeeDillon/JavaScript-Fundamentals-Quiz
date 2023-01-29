@@ -8,14 +8,16 @@ const choicesEl = $('#choices');
 const finalScoreEl = $('#final-score');
 const feedbackEl = $('#feedback');
 const endSection = $('#end-screen');
+const timerEl = $('#time');
 
 var questionNumber = 0;
+var time = 100;
 
 
-// Function for getting a random element from an array
-function getRandom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
+// // Function for getting a random element from an array
+// function getRandom(arr) {
+//     return arr[Math.floor(Math.random() * arr.length)];
+// }
 
 
 
@@ -33,11 +35,24 @@ function loadQuestion() {
 
         for (i = 2; i < randomQuestionArray.length; i++) {
             var answerBtnEl = $('<button>');
+            var answerIndex = i;
             answerBtnEl.attr('id', 'answer');
+            answerBtnEl.attr('data-index', i);
             answerBtnEl.text(randomQuestionArray[i]);
             answerBtnEl.addClass('answer-button');
-            answerBtnEl.on('click', clearAnswers);
+            answerBtnEl.on('click', function () {
+                console.log(answerIndex);
+                console.log(randomQuestionArray[1]);
+                if (answerIndex == randomQuestionArray[1]) {
+                    console.log("Correct")
+                } else {
+                    console.log("Incorrect")
+                }
+                console.log("hello");
+                clearAnswers();
+            });
             choicesEl.append(answerBtnEl);
+            // console.log("Your answer is", randomQuestionArray[i]);
         }
         questionArray.splice(questionIndex, 1);
     } else {
@@ -51,6 +66,8 @@ startBtnEl.on('click', loadQuestion);
 
 // Function for clearing answer buttons and loading next question
 function clearAnswers() {
+    // if(answerBtnEl){} else {}
+    // console.log(answerBtnEl);
     choicesEl.empty();
     loadQuestion();
 }
