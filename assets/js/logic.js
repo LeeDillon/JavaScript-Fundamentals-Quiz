@@ -7,6 +7,7 @@ const questionTitleEl = $('#question-title');
 const choicesEl = $('#choices');
 const finalScoreEl = $('#final-score');
 const feedbackEl = $('#feedback');
+const endSection = $('#end-screen');
 
 var questionNumber = 0;
 
@@ -20,26 +21,29 @@ function getRandom(arr) {
 
 // Function to select 10 questions at random and populate the quiz accordingly
 function loadQuestion() {
-    questionsEl.css('display', 'block');
-    startSection.css('display', 'none');
+    if (questionNumber < 10) {
+        questionsEl.css('display', 'block');
+        startSection.css('display', 'none');
 
-    var questionIndex = Math.floor(Math.random() * questionArray.length);
-    var randomQuestionArray = questionArray[questionIndex];
-
-
-
-    for (i = 2; i < randomQuestionArray.length; i++) {
+        var questionIndex = Math.floor(Math.random() * questionArray.length);
+        var randomQuestionArray = questionArray[questionIndex];
         questionNumber++;
-        questionnumberEl.text(questionNumber);
-        questionTitleEl.text('Question No. ' + questionNumber + ": " + randomQuestionArray[0]);
-        var answerBtnEl = $('<button>');
-        answerBtnEl.attr('id', 'answer');
-        answerBtnEl.text(randomQuestionArray[i]);
-        answerBtnEl.addClass('answer-button');
-        answerBtnEl.on('click', clearAnswers);
-        choicesEl.append(answerBtnEl);
+        questionnumberEl.text('Question No. ' + questionNumber + ": ");
+        questionTitleEl.text(randomQuestionArray[0]);
+
+        for (i = 2; i < randomQuestionArray.length; i++) {
+            var answerBtnEl = $('<button>');
+            answerBtnEl.attr('id', 'answer');
+            answerBtnEl.text(randomQuestionArray[i]);
+            answerBtnEl.addClass('answer-button');
+            answerBtnEl.on('click', clearAnswers);
+            choicesEl.append(answerBtnEl);
+        }
+        questionArray.splice(questionIndex, 1);
+    } else {
+        questionsEl.css('display', 'none');
+        endSection.css('display', 'block');
     }
-    questionArray.splice(questionIndex, 1);
 }
 
 startBtnEl.on('click', loadQuestion);
