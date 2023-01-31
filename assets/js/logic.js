@@ -22,9 +22,12 @@ var initialsEl = document.getElementById("initials");
 var questionNumber = 0;
 var time = 100;
 var userScore = 0;
+var leaderBoard = [];
+const userObject = {};
 
 // Function to select 10 questions at random and populate the quiz accordingly
 function loadQuestion() {
+
     if (questionNumber < 10) {
         questionsEl.css('display', 'block');
         startSection.css('display', 'none');
@@ -69,7 +72,9 @@ function loadQuestion() {
         questionsEl.css('display', 'none');
         endSection.css('display', 'block');
         // Save results to local storage and display results
+        userObject.finalScore = userScore;
         localStorage.setItem("score", userScore);
+        userObject.finalTime = time;
         localStorage.setItem("time", time);
         finalScoreEl.text(userScore);
         finaltimeEl.text(time);
@@ -79,7 +84,9 @@ function loadQuestion() {
 startBtnEl.on('click', startQuiz);
 
 submitEl.on('click', function () {
-    localStorage.setItem("initials", initialsEl.value);
+    userObject.initials = initialsEl.value;
+    leaderBoard.push(userObject);
+    localStorage.setItem("leaderboard", JSON.stringify(leaderBoard));
 });
 
 // Function for starting quiz
@@ -108,3 +115,13 @@ function startTimer() {
         }
     }, 1000);
 }
+
+// Function to store results into an object and then save that in local storage
+// const myObject = {
+//     name: "john doe",
+//     age: 32,
+//     gender: "male",
+//     profession: "optician"
+// }
+
+// window.localStorage.setItem("myObject", JSON.stringify(myObject));
