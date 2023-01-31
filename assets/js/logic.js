@@ -6,25 +6,22 @@ const questionnumberEl = $('#question-number');
 const questionTitleEl = $('#question-title');
 const choicesEl = $('#choices');
 const finalScoreEl = $('#final-score');
+const finaltimeEl = $('#final-time');
 const feedbackEl = $('#feedback');
 const endSection = $('#end-screen');
 const timerEl = $('#time');
 const timeoutEl = $('#timeout-screen');
-// Why doesn't Jquery selector work for audio???
+const submitEl = $('#submit');
+
+// Non jquery selectors for audio elements(Why doesn't Jquery selector work for audio???)
 const correctSoundEl = document.getElementById('correctSound');
 const incorrectSoundEl = document.getElementById('incorrectSound');
+var initialsEl = document.getElementById("initials");
 
+// Creating variables that need to be accessed by different functions and should have default values at start of quiz
 var questionNumber = 0;
 var time = 100;
 var userScore = 0;
-
-
-// // Function for getting a random element from an array
-// function getRandom(arr) {
-//     return arr[Math.floor(Math.random() * arr.length)];
-// }
-
-
 
 // Function to select 10 questions at random and populate the quiz accordingly
 function loadQuestion() {
@@ -32,24 +29,25 @@ function loadQuestion() {
         questionsEl.css('display', 'block');
         startSection.css('display', 'none');
 
+        // Get a random question from the array of questions
         var questionIndex = Math.floor(Math.random() * questionArray.length);
         var randomQuestionArray = questionArray[questionIndex];
         questionNumber++;
         questionnumberEl.text('Question No. ' + questionNumber + ": ");
+        // Take the title from the first item in the question array
         questionTitleEl.text(randomQuestionArray[0]);
-
+        // Iterate through the rest of the question array from index two onwards where the possible answers are stored. Dynamically generate a button for each possible answer so that you can easily create new questions with as many possible answers as you like.
         for (i = 2; i < randomQuestionArray.length; i++) {
             var answerBtnEl = $('<button>');
-            var answerIndex = i;
-            console.log(answerIndex);
+            // Give each button an id value that can be checked against the correct answer index that is stored in index 1 of the question array. I wanted to avoid using the id attribute but ran into issues using a custom attribute 'dataindex'.
             answerBtnEl.attr('id', i);
             // answerBtnEl.attr('dataindex', i); WHY DIDN'T THIS WORK!?!?!
             answerBtnEl.text(randomQuestionArray[i]);
             answerBtnEl.addClass('answer-button');
             answerBtnEl.on('click', function () {
+                // Get the previously created id value and store to a variable buttonValue
                 var buttonValue = this.id;
-                console.log(buttonValue);
-                console.log(randomQuestionArray[1]);
+                // Check buttonValue against correct answer index to see if correct
                 if (buttonValue == randomQuestionArray[1]) {
                     console.log("Correct");
                     userScore++;
@@ -59,19 +57,30 @@ function loadQuestion() {
                     incorrectSoundEl.play();
                     time -= 10;
                 }
-                console.log("hello");
+                // After button is clicked run below function to reset answer buttons
                 clearAnswers();
             });
             choicesEl.append(answerBtnEl);
         }
+        // After a question has been used remove this from the array of questions so that it is not repeated
         questionArray.splice(questionIndex, 1);
     } else {
+        // After 10 questions have been answered run the following to end the quiz. This quiz is designed so that you can easily expand to have as many questions as you like, 10 will then be selected at random.
         questionsEl.css('display', 'none');
         endSection.css('display', 'block');
+        // Save results to local storage and display results
+        localStorage.setItem("score", userScore);
+        localStorage.setItem("time", time);
+        finalScoreEl.text(userScore);
+        finaltimeEl.text(time);
     }
 }
 
 startBtnEl.on('click', startQuiz);
+
+submitEl.on('click', function () {
+    localStorage.setItem("initials", initialsEl.value);
+});
 
 // Function for starting quiz
 function startQuiz() {
@@ -85,7 +94,7 @@ function clearAnswers() {
     loadQuestion();
 }
 
-// Function for displaying and updating timer
+// Function for displaying reducing timer, when it reaches zero a timeout message is displayed
 function startTimer() {
 
     setInterval(function () {
