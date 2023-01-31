@@ -22,7 +22,6 @@ var initialsEl = document.getElementById("initials");
 var questionNumber = 0;
 var time = 100;
 var userScore = 0;
-var leaderBoard = [];
 const userObject = {};
 
 // Function to select 10 questions at random and populate the quiz accordingly
@@ -71,11 +70,9 @@ function loadQuestion() {
         // After 10 questions have been answered run the following to end the quiz. This quiz is designed so that you can easily expand to have as many questions as you like, 10 will then be selected at random.
         questionsEl.css('display', 'none');
         endSection.css('display', 'block');
-        // Save results to local storage and display results
+        // Save results to userObject and display results
         userObject.finalScore = userScore;
-        localStorage.setItem("score", userScore);
         userObject.finalTime = time;
-        localStorage.setItem("time", time);
         finalScoreEl.text(userScore);
         finaltimeEl.text(time);
     }
@@ -84,9 +81,12 @@ function loadQuestion() {
 startBtnEl.on('click', startQuiz);
 
 submitEl.on('click', function () {
+    // Store initials to userObject
     userObject.initials = initialsEl.value;
-    leaderBoard.push(userObject);
-    localStorage.setItem("leaderboard", JSON.stringify(leaderBoard));
+    // Get scores from local Storage, if none then return an empty array to populate with our UserObjects. Then finally save the new array back into local storage.
+    scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    scores.push(userObject);
+    localStorage.setItem("leaderboard", JSON.stringify(scores));
 });
 
 // Function for starting quiz
