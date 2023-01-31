@@ -9,6 +9,7 @@ const finalScoreEl = $('#final-score');
 const feedbackEl = $('#feedback');
 const endSection = $('#end-screen');
 const timerEl = $('#time');
+const timeoutEl = $('#timeout-screen');
 // Why doesn't Jquery selector work for audio???
 const correctSoundEl = document.getElementById('correctSound');
 const incorrectSoundEl = document.getElementById('incorrectSound');
@@ -56,7 +57,7 @@ function loadQuestion() {
                 } else {
                     console.log("Incorrect");
                     incorrectSoundEl.play();
-                    time - 10;
+                    time -= 10;
                 }
                 console.log("hello");
                 clearAnswers();
@@ -70,8 +71,13 @@ function loadQuestion() {
     }
 }
 
-startBtnEl.on('click', loadQuestion);
+startBtnEl.on('click', startQuiz);
 
+// Function for starting quiz
+function startQuiz() {
+    startTimer();
+    loadQuestion();
+}
 
 // Function for clearing answer buttons and loading next question
 function clearAnswers() {
@@ -79,4 +85,17 @@ function clearAnswers() {
     loadQuestion();
 }
 
+// Function for displaying and updating timer
+function startTimer() {
 
+    setInterval(function () {
+        time--;
+        timerEl.text(time);
+
+        if (time < 0) {
+            questionsEl.css('display', 'none');
+            timeoutEl.css('display', 'block');
+            time = 0;
+        }
+    }, 1000);
+}
